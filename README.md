@@ -41,7 +41,7 @@ docker-compose up --build -d
 docker exec -it $(docker ps -qf "name=elk-elasticsearch") sh bin/elasticsearch-setup-passwords auto
 ```
 
-### 사용자 및 비밀번호 메모
+### 사용자 및 비밀번호 메모
 
 ```sh
 # 예시 결과
@@ -124,6 +124,12 @@ Password: <YOUR ELASTIC PASSWORD>
 
 1. 좌측 상단 메뉴 탭 -> Management -> Stack Management -> Security -> Roles 생성
 
+<img width="228" alt="Create role 1 - ELK" src="https://github.com/ash991213/ELK/assets/99451647/a733369f-3483-4305-9b08-1ff84c904e33">
+
+<img width="234" alt="Create role 2 - ELK" src="https://github.com/ash991213/ELK/assets/99451647/82da8259-578b-498b-9140-0b45203418ed">
+
+<img width="1633" alt="Create role 3 - ELK" src="https://github.com/ash991213/ELK/assets/99451647/293359e6-f663-47e6-86ed-d09d3f7a6013">
+
 2. logstash role 생성
 
    - Cluster privileges: all
@@ -132,7 +138,13 @@ Password: <YOUR ELASTIC PASSWORD>
 
    - Index privileges - Privileges: all
 
-3. 좌측 상단 메뉴 탭 -> Management -> Stack Management -> Security -> Users 생성
+<img width="1880" alt="logstash create role " src="https://github.com/ash991213/ELK/assets/99451647/b7dea488-abac-4741-9e40-52dcd482af7b">
+
+3. 좌측 메뉴 -> Security -> Users 생성
+
+<img width="230" alt="Create user 1 - ELK " src="https://github.com/ash991213/ELK/assets/99451647/b2582f25-c6ef-480b-9bf1-f8567d15de0b">
+
+<img width="1654" alt="Create user 2 - ELK" src="https://github.com/ash991213/ELK/assets/99451647/fffcda5b-2283-47d0-82c7-4a162a4b618a">
 
 4. logstash의 user 생성
 
@@ -141,6 +153,8 @@ Password: <YOUR ELASTIC PASSWORD>
    - Password: {유저 비밀번호}
 
    - Privileges - Roles: {Role에서 설정한 Role Name 설정}
+
+<img width="1090" alt="logstash create user " src="https://github.com/ash991213/ELK/assets/99451647/d58f226d-9f35-4e62-a988-b5f75c6a9675">
 
 5. 생성한 user 정보로 logstash.yml, logstash.conf, kibana.yml 수정
 
@@ -174,3 +188,9 @@ Logstash에 변경사항을 적용하기 위해 서비스를 재시작합니다.
 ```sh
 docker-compose up --build -d logstash
 ```
+
+### 서비스 로그 확인
+
+좌측 상단 메뉴 탭 -> Observability -> Logs
+
+<img width="1638" alt="log 확인" src="https://github.com/ash991213/ELK/assets/99451647/62c8f5f9-d52c-404f-9e24-d329425a8690">
