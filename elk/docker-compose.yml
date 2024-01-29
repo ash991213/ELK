@@ -1,0 +1,78 @@
+version: '3.8'
+
+services: # docker-compose에서 관리할 서비스 컨테이너 정의
+  elasticsearch: # Elasticsearch 서비스 컨테이너
+    # build: # docker image를 빌드할 때 사용할 설정
+    #   context: elasticsearch/ # 사용할 Dockerfile 위치 경로
+    #   args: # 빌드시 사용할 변수
+    #     ELK_VERSION: $ELK_VERSION
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.2
+    volumes: # 컨테이너와 호스트 사이 데이터를 공유하기 위한 볼륨 설정
+      - type: bind
+        source: ./elasticsearch/config/elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+        read_only: true
+      - type: volume
+        source: elasticsearch
+        target: /usr/share/elasticsearch/data
+    ports: # 컨테이너가 사용할 포트를 호스트에 매핑
+      - '9200:9200'
+      - '9300:9300'
+    environment: # 컨테이너 실행 시 설정할 환경 변수
+      ES_JAVA_OPTS: '-Xmx256m -Xms256m'
+      ELASTIC_PASSWORD: '01211213'
+      discovery.type: single-node
+    networks: # 서비스가 연결할 네트워크
+      - elk
+
+  logstash:
+    # build:
+    #   context: logstash/
+    #   args:
+    #     ELK_VERSION: $ELK_VERSION
+    image: docker.elastic.co/logstash/logstash:8.8.2
+    volumes:
+      - type: bind
+        source: ./logstash/config/logstash.yml
+        target: /usr/share/logstash/config/logstash.yml
+        read_only: true
+      - type: bind
+        source: ./logstash/pipeline
+        target: /usr/share/logstash/pipeline
+        read_only: true
+    ports:
+      - '5044:5044/tcp'
+      - '5044:5044/udp'
+      - '9600:9600'
+    environment:
+      LS_JAVA_OPTS: '-Xmx256m -Xms256m'
+    networks:
+      - elk
+    depends_on: # 이 서비스 컨테이너가 실행되기 전에 실행되어야 할 서비스
+      - elasticsearch
+
+  kibana:
+    # build:
+    #   context: kibana/
+    #   args:
+    #     ELK_VERSION: $ELK_VERSION
+    image: docker.elastic.co/kibana/kibana:8.8.2
+    volumes:
+      - type: bind
+        source: ./kibana/config/kibana.yml
+        target: /usr/share/kibana/config/kibana.yml
+        read_only: true
+    ports:
+      - '5601:5601'
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+networks: # 사용할 네트워크 정의
+  elk:
+    # external: true # 네트워크는 외부에서 생성된 것으로 가정하고, 이 파일 내에서는 생성되지 않습니다.
+    driver: bridge
+
+volumes: # 사용할 볼륨 정의
+  elasticsearch:

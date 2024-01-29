@@ -1,0 +1,17 @@
+# Elasticsearch 클러스터의 이름을 설정합니다. 클러스터 이름은 여러 노드가 서로를 식별하고 클러스터로 함께 작동할 수 있도록 합니다.
+cluster.name: 'docker-cluster'
+
+# Elasticsearch가 어떤 호스트 주소를 수신할지 결정합니다.. '0.0.0.0'은 모든 사용 가능한 네트워크를 수신하겠다는 의미로, 외부에서의 접근을 허용합니다.
+network.host: 0.0.0.0
+
+# X-Pack 플러그인의 라이선스 유형을 정의하는 데 사용됩니다. 유형의 내용은 다음과 같습니다.
+# basic (default) : 기본 라이선스는 무료이며 영구적으로 사용할 수 있습니다. 고급 기능은 사용할 수 없습니다.
+# trial : 30일동안 X-Pack의 모든 고급 기능을 포함하여 Elasticsearch가 제공하는 모든 기능을 일시적으로 사용할 수 있도록 해줍니다. 트라이얼 기간이 끝난 후에, 사용자는 클러스터를 기본 라이선스로 다운그레이드할 수 있습니다.
+xpack.license.self_generated.type: basic
+# xpack.license.self_generated.type: trial
+
+# X-Pack 보안 기능을 활성화합니다. X-Pack은 Elasticsearch의 확장 팩으로, 보안(인증 및 권한 부여), 모니터링, 경고, 그래프 탐색 등과 같은 추가 기능을 제공합니다.
+xpack.security.enabled: true
+
+# X-Pack 모니터링 기능을 활성화합니다. 모니터링을 사용하면 Elasticsearch 클러스터의 성능과 상태를 실시간으로 추적하고 분석할 수 있습니다.
+xpack.monitoring.collection.enabled: true
